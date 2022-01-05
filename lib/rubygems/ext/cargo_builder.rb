@@ -57,7 +57,7 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
   end
 
   def platform_specific_rustc_args
-    flags = ["-C", "linker=#{RbConfig::CONFIG.fetch('CC')}"]
+    flags = ["-C", "linker=#{RbConfig::CONFIG.fetch('LD')}"]
     flags += ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"] if Gem.win_platform?
     flags
   end
