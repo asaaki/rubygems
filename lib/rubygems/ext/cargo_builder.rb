@@ -134,11 +134,14 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
   def rustc_dynamic_linker_flags
     args = RbConfig::CONFIG.fetch("DLDFLAGS", "").strip.split(" ")
 
-    args.flat_map {|a| ldflag_to_link_mofifier(a) }.compact
+    args.flat_map {|a| ldflag_to_link_modifier(a) }.compact + [
+      "-L", RbConfig::CONFIG["libdir"],
+      "-l", RbConfig::CONFIG["LIBRUBYARG"][2..-1]
+    ]
   end
 
-  def ldflag_to_link_mofifier(input_arg)
-    # Intepolate substition vars in the arg (i.e. $(DEFFILE))
+  def ldflag_to_link_modifier(input_arg)
+    # Interpolate substitution vars in the arg (i.e. $(DEFFILE))
     arg = input_arg.gsub(/\$\((\w+)\)/) { RbConfig::CONFIG[$1] }.strip
 
     return if arg == ""
