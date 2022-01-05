@@ -47,20 +47,24 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
 
   def cargo_rustc_args(_dest_dir)
     [
-      "-vv", # TEMP: just to see if we get output during test runs
       "--lib",
       "--release",
       "--locked",
       "--",
       *platform_specific_rustc_args,
       *rustc_dynamic_linker_flags,
+      # maybe???
+      # RbConfig::CONFIG.fetch('LIBRUBYARG'),
     ]
   end
 
   def platform_specific_rustc_args
     # use Ruby's preferred toolchain for linking:
-    flags = ["-C", "linker=#{RbConfig::CONFIG.fetch('CC')}"]
-    flags += ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"] if Gem.win_platform?
+    flags = []
+    flags += ["-C", "linker=#{RbConfig::CONFIG.fetch('CC')}"]
+    # flags += ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"] if Gem.win_platform?
+    # https://stackoverflow.com/a/57502656/653173
+    flags += ["-C", "link-arg=-Wl,allow-shlib-undefined"] if Gem.win_platform?
     flags
   end
 
