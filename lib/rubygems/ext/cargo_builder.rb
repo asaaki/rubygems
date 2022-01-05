@@ -50,6 +50,8 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
       "--lib",
       "--release",
       "--locked",
+      "--error-format=json",
+      "--json=artifact",
       "--",
       *platform_specific_rustc_args,
       *rustc_dynamic_linker_flags,
