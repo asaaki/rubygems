@@ -56,7 +56,8 @@ class TestGemExtCargoBuilder < Gem::TestCase
 
     output = output.join "\n"
 
-    bundle = File.join(@dest_path, "release/rust_ruby_example.#{RbConfig::CONFIG['DLEXT']}")
+    ext = Gem.win_platform? ? RbConfig::CONFIG['SOEXT'] : RbConfig::CONFIG['DLEXT']
+    bundle = File.join(@dest_path, "release/rust_ruby_example.#{ext}")
 
     require(bundle)
 
