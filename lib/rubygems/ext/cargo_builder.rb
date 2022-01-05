@@ -54,7 +54,7 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
       *platform_specific_rustc_args,
       *rustc_dynamic_linker_flags,
       # maybe???
-      # RbConfig::CONFIG.fetch('LIBRUBYARG'),
+      RbConfig::CONFIG.fetch('LIBRUBYARG'),
     ]
   end
 
@@ -62,9 +62,9 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
     # use Ruby's preferred toolchain for linking:
     flags = []
     flags += ["-C", "linker=#{RbConfig::CONFIG.fetch('CC')}"]
-    # flags += ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"] if Gem.win_platform?
-    # https://stackoverflow.com/a/57502656/653173
-    flags += ["-C", "link-arg=-Wl,--allow-shlib-undefined"] if Gem.win_platform?
+    flags += ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"] if Gem.win_platform?
+    # does not help: https://stackoverflow.com/a/57502656/653173
+    # flags += ["-C", "link-arg=-Wl,--allow-shlib-undefined"] if Gem.win_platform?
     flags
   end
 
