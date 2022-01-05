@@ -123,8 +123,8 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
   # Ruby expects the dylib to follow a file name convention for loading
   def rename_cdylib_for_ruby_compatibility(dest_path)
     dylib_path = validate_cargo_build!(dest_path)
-    ext = Gem.win_platform? ? RbConfig::CONFIG['SOEXT'] : RbConfig::CONFIG['DLEXT']
-    dlext_name = "#{spec.name}.#{ext}"
+    return dylib_path if Gem.win_platform?
+    dlext_name = "#{spec.name}.#{RbConfig::CONFIG['DLEXT']}"
     new_name = dylib_path.gsub(File.basename(dylib_path), dlext_name)
     FileUtils.cp(dylib_path, new_name)
     new_name
