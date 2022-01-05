@@ -115,5 +115,6 @@ class TestGemExtCargoBuilder < Gem::TestCase
   def skip_unsupported_platforms!
     pend "Rust extensions are not supported on jruby" if java_platform?
     pend "Pending support for truffleruby in Rust extensions" if RUBY_ENGINE == 'truffleruby'
+    pend "mswin not supported (yet)" if /mswin/ =~ RUBY_PLATFORM && ENV.key?('GITHUB_ACTIONS')
   end
 end
