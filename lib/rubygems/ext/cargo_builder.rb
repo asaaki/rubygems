@@ -47,6 +47,7 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
 
   def cargo_rustc_args(_dest_dir)
     [
+      "-vv", # TEMP: just to see if we get output during test runs
       "--lib",
       "--release",
       "--locked",
