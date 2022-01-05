@@ -39,11 +39,11 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ matrix.cargo.toolchain }}-${{ matrix.cargo.target }}
+          default: true
+          # override: true
           # target: ${{ matrix.cargo.target }}
       - name: Install Dependencies and Run Test
-        # explicitly set the toolchain default to stable-gnu!
         run: |
-          rustup default ${{ matrix.cargo.toolchain }}-${{ matrix.cargo.target }}
           rake setup
           rake test
         env:
