@@ -53,16 +53,21 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
       "--",
       *platform_specific_rustc_args,
       *rustc_dynamic_linker_flags,
+      *ruby_linking_args
     ]
   end
 
   def platform_specific_rustc_args
-    # use Ruby's preferred toolchain for linking:
     flags = []
     flags += ["-C", "linker=#{RbConfig::CONFIG.fetch('CC')}"]
-    # that might be not working at all under Windows:
-    flags += ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"] if Gem.win_platform?
     flags
+  end
+  
+  def ruby_linking_args
+    [
+      "-L", RbConfig::CONFIG["libdir"],
+      RbConfig::CONFIG["LIBRUBYARG"]
+    ]
   end
 
   def ruby_static?
@@ -134,10 +139,7 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
   def rustc_dynamic_linker_flags
     args = RbConfig::CONFIG.fetch("DLDFLAGS", "").strip.split(" ")
 
-    args.flat_map {|a| ldflag_to_link_modifier(a) }.compact + [
-      "-L", RbConfig::CONFIG["libdir"],
-      "-l", RbConfig::CONFIG["LIBRUBYARG"][2..-1]
-    ]
+    args.flat_map {|a| ldflag_to_link_modifier(a) }.compact
   end
 
   def ldflag_to_link_modifier(input_arg)
