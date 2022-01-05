@@ -62,7 +62,9 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
     flags += ["-C", "linker=#{RbConfig::CONFIG.fetch('CC')}"]
     flags += ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"] if Gem.win_platform?
     # https://stackoverflow.com/a/5556948/653173
-    flags += ["-C", "link-arg=-Wl,--unresolved-symbols=ignore-in-shared-libs"] if Gem.win_platform?
+    # flags += ["-C", "link-arg=-Wl,--unresolved-symbols=ignore-in-shared-libs"] if Gem.win_platform?
+    # or maybe just warn and do nothing?
+    flags += ["-C", "link-arg=-Wl,--warn-unresolved-symbols"] if Gem.win_platform?
     flags
   end
 
