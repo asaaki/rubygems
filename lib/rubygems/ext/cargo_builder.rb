@@ -64,7 +64,7 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
     flags += ["-C", "linker=#{RbConfig::CONFIG.fetch('CC')}"]
     # flags += ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"] if Gem.win_platform?
     # https://stackoverflow.com/a/57502656/653173
-    flags += ["-C", "link-arg=-Wl,allow-shlib-undefined"] if Gem.win_platform?
+    flags += ["-C", "link-arg=-Wl,--allow-shlib-undefined"] if Gem.win_platform?
     flags
   end
 
