@@ -32,7 +32,7 @@ class Gem::Ext::CargoBuilder < Gem::Ext::Builder
     cargo = ENV.fetch("CARGO", "cargo")
 
     cmd = []
-    cmd += [cargo, "rustc"]
+    cmd += [cargo, "rustc", "-vv"]
     cmd += ["--target-dir", dest_path]
     cmd += ["--manifest-path", manifest]
     cmd += [*cargo_rustc_args(dest_path)]
